@@ -7,7 +7,7 @@ df = pd.read_csv("lichess_merged_7months.csv")
 # Drop rows with missing values
 df_clean = df.dropna(subset=["opening_name", "result", "winner_color"])
 
-# 🔥 Define list of famous/popular openings to focus on
+# 🎯 Popular openings filter (minor edit: clarified this section)
 popular_openings = [
     "Queen's Pawn Game",
     "Caro-Kann Defense",
@@ -26,21 +26,20 @@ popular_openings = [
     "Hungarian Opening"
 ]
 
-
-# Filter only these openings
+# Filter dataset to only include selected openings
 df_filtered = df_clean[df_clean["opening_name"].isin(popular_openings)]
 
-# Group data
+# Prepare grouped data for sunburst
 sunburst_data = df_filtered.groupby(
     ["opening_name", "result", "winner_color"]
-).size().reset_index(name='count')
+).size().reset_index(name="count")
 
 # Sunburst chart
 fig = px.sunburst(
     sunburst_data,
     path=["opening_name", "result", "winner_color"],
-    values='count',
-    color='winner_color',
+    values="count",
+    color="winner_color",
     color_discrete_map={
         "White": "#1f77b4",
         "Black": "#d62728",
